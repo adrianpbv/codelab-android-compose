@@ -22,6 +22,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.samples.crane.details.launchDetailsActivity
 import androidx.compose.samples.crane.ui.CraneTheme
 import androidx.core.view.WindowCompat
@@ -45,12 +49,23 @@ class MainActivity : ComponentActivity() {
                 })
             }
         }
+        // TODO 12: Codelab Advanced State and Side Effects in Jetpack Compose
+    //  You learned about how to create state holders, side effect APIs such as LaunchedEffect,
+    //  rememberUpdatedState, DisposableEffect, produceState, and derivedStateOf, and
+    //  how to use coroutines in Jetpack Compose.
     }
 }
 
 @Composable
 private fun MainScreen(onExploreItemClicked: OnExploreItemClicked) {
+
+    // TODO 4 add an internal state that tracks whether the landing should be shown or not:
     Surface(color = MaterialTheme.colors.primary) {
-        CraneHome(onExploreItemClicked = onExploreItemClicked)
+        var showLandingScreen by remember { mutableStateOf(true) }
+        if (showLandingScreen) {
+            LandingScreen(onTimeout = { showLandingScreen = false })
+        } else {
+            CraneHome(onExploreItemClicked = onExploreItemClicked)
+        }
     }
 }
