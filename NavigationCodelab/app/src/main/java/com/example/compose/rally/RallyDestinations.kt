@@ -23,6 +23,9 @@ import androidx.compose.material.icons.filled.MoneyOff
 import androidx.compose.material.icons.filled.PieChart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.compose.rally.ui.accounts.AccountsScreen
 import com.example.compose.rally.ui.accounts.SingleAccountScreen
 import com.example.compose.rally.ui.bills.BillsScreen
@@ -34,7 +37,8 @@ import com.example.compose.rally.ui.overview.OverviewScreen
 interface RallyDestination {
     val icon: ImageVector
     val route: String
-    val screen: @Composable () -> Unit
+    // TODO Remove screen Composable, Rally Dest will only hold navigation specific information
+    //val screen: @Composable () -> Unit
 }
 
 /**
@@ -43,19 +47,16 @@ interface RallyDestination {
 object Overview : RallyDestination {
     override val icon = Icons.Filled.PieChart
     override val route = "overview"
-    override val screen: @Composable () -> Unit = { OverviewScreen() }
 }
 
 object Accounts : RallyDestination {
     override val icon = Icons.Filled.AttachMoney
     override val route = "accounts"
-    override val screen: @Composable () -> Unit = { AccountsScreen() }
 }
 
 object Bills : RallyDestination {
     override val icon = Icons.Filled.MoneyOff
     override val route = "bills"
-    override val screen: @Composable () -> Unit = { BillsScreen() }
 }
 
 object SingleAccount : RallyDestination {
@@ -63,9 +64,24 @@ object SingleAccount : RallyDestination {
     // part of the RallyTabRow selection
     override val icon = Icons.Filled.Money
     override val route = "single_account"
-    override val screen: @Composable () -> Unit = { SingleAccountScreen() }
+    //override val screen: @Composable () -> Unit = { SingleAccountScreen() }
     const val accountTypeArg = "account_type"
+    val routeWithArgs = "${route}/{${accountTypeArg}}"
+    // TODO 10 Define the composable argument parameter
+    val arguments = listOf(
+        navArgument(accountTypeArg) { type = NavType.StringType}
+    )
+    val deepLinks = listOf(
+        navDeepLink { uriPattern = "rally://$route/{$accountTypeArg}"}
+    )
 }
 
 // Screens to be displayed in the top RallyTabRow
 val rallyTabRowScreens = listOf(Overview, Accounts, Bills)
+
+// TODO 1 Steps to migrate to Compose Navigation
+// 1. Add the latest Compose Navigation dependency
+// 2. Set up the NavController
+// 3. Add a NavHost and create the navigation graph
+// 4. Prepare routes for navigating between different app destinations
+// 5. Replace the current navigation mechanism with Compose Navigation

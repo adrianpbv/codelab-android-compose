@@ -28,7 +28,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
+import com.example.compose.rally.ui.accounts.AccountsScreen
+import com.example.compose.rally.ui.accounts.SingleAccountScreen
+import com.example.compose.rally.ui.bills.BillsScreen
 import com.example.compose.rally.ui.components.RallyTabRow
+import com.example.compose.rally.ui.overview.OverviewScreen
 import com.example.compose.rally.ui.theme.RallyTheme
 
 /**
@@ -47,19 +60,39 @@ class RallyActivity : ComponentActivity() {
 @Composable
 fun RallyApp() {
     RallyTheme {
-        var currentScreen: RallyDestination by remember { mutableStateOf(Overview) }
+        //val currentScreen: RallyDestination by remember { mutableStateOf(Overview) }
+        val navController = rememberNavController() // TODO 2 get NavController
+        // get real time updates on your current destination from the back stack as State
+        val currentBackStack by navController.currentBackStackEntryAsState()
+        val currentDestination = currentBackStack?.destination // NavDestination
+        // TODO 7 update the current selected screen
+        val currentScreen = rallyTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
         Scaffold(
             topBar = {
                 RallyTabRow(
                     allScreens = rallyTabRowScreens,
-                    onTabSelected = { screen -> currentScreen = screen },
+                    // TODO 6 link the NavController to the top Bar
+                    onTabSelected = { newScreen ->
+                        navController.navigateSingleTopTo(newScreen.route)
+                    }, // callback defining the navigation action
+                    //onTabSelected = { screen -> currentScreen = screen },
                     currentScreen = currentScreen
                 )
             }
         ) { innerPadding ->
-            Box(Modifier.padding(innerPadding)) {
-                currentScreen.screen()
-            }
+            // TODO 3 Create the NavHost and link it to the NavController
+            RallyNavHost(navController = navController,
+                         modifier = Modifier.padding(innerPadding))
+//            Box(Modifier.padding(innerPadding)) {
+//                currentScreen.screen()
+//            }
         }
     }
 }
+
+// Note:
+// RallyApp is the one and only composable that should work directly with the navController.
+// Every other nested composable screen should only obtain navigation callbacks,
+// not the navController itself.
+// This allows all your composables to be individually testable, as they do not require
+// an instance of navController in tests.

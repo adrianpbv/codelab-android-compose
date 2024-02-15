@@ -32,6 +32,16 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+<!--           TODO 15 Enable the deep link (a link that takes you directly to a specific destination within an app)-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+<!--                This will give you rally://single_account as the deep link URL.
+                    (rally - name of your app) and host (single_account - route to your composable)-->
+                <data android:scheme="rally" android:host="single_account" />
+            </intent-filter>
         </activity>
     </application>
 </manifest>

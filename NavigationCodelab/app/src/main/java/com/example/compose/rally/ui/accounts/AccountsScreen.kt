@@ -46,7 +46,7 @@ fun AccountsScreen(
         rows = { account ->
             AccountRow(
                 modifier = Modifier.clickable {
-                    onAccountClick(account.name)
+                    onAccountClick(account.name) // TODO 14 here the argument is passed and the navigation is triggered
                 },
                 name = account.name,
                 number = account.number,
