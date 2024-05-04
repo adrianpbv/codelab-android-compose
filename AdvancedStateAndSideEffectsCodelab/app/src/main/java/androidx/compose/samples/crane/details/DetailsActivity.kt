@@ -109,8 +109,7 @@ fun DetailsScreen(
     // produceState allows you to convert non-Compose state into Compose State. It launches a coroutine scoped
     // to the Composition that can push values into the returned State using the value property.
     val uiState by produceState(initialValue = DetailsUiState(isLoading = true)){
-        // In a coroutine, this can call suspend functions or move
-        // the computation to different Dispatchers
+        // In a coroutine, this can call suspend functions or move the computation to different Dispatchers
         val cityDetailsResult = viewModel.cityDetails
         value = if (cityDetailsResult is Result.Success<ExploreModel>) {
             DetailsUiState(cityDetailsResult.data)

@@ -34,12 +34,14 @@ private const val SplashWaitTime: Long = 2000
 @Composable
 fun LandingScreen(onTimeout: () -> Unit, modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        // A side-effect in Compose is a change to the state of the app that happens outside the scope of a composable function
+
         // TODO 3: LaunchedEffect and rememberUpdatedState step
-        // This will always refer to the latest onTimeout function that
-        // LandingScreen was recomposed with
+        // This will always refer to the latest onTimeout function that LandingScreen was recomposed with
         val currentOnTimeout by rememberUpdatedState(onTimeout)
 
-        // Create an effect that matches the lifecycle of LandingScreen.
+        // To call suspend functions safely from inside a composable, use the LaunchedEffect API, which triggers a coroutine-scoped side-effect in Compose.
+        // Create an effect that matches the lifecycle of LandingScreen, the coroutine will be canceled if LaunchedEffect leaves the composition
         // If LandingScreen recomposes or onTimeout changes, the delay shouldn't start again.
         LaunchedEffect(Unit) {
             delay(SplashWaitTime)

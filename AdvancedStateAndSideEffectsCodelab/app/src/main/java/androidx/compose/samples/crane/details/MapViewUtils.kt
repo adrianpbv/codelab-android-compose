@@ -53,6 +53,8 @@ fun rememberMapViewWithLifecycle(): MapView {
         onDispose {
             lifecycle.removeObserver(lifecycleObserver)
         }
+        // with this changes the MapView will always follow the lifecycle of the current LifecycleOwner
+        // and its behavior would be just as if it was used in the View world.
     }
     //  In a real Compose app, you can use the new Maps for Compose library which will handle lifecycle events for you.
     return mapView

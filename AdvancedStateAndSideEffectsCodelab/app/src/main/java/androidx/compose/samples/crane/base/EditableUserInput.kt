@@ -76,6 +76,7 @@ class EditableUserInputState(private val hint: String, initialText: String){
         get() = text == hint
 
     companion object {
+        // to indicate rememberSaveable how to save and restore an instance of this class use a Saver.
         val Saver: Saver<EditableUserInputState, *> = listSaver(
             save = { listOf(it.hint, it.text) },
             restore = {
@@ -88,6 +89,7 @@ class EditableUserInputState(private val hint: String, initialText: String){
     }
 }
 
+// State holders always need to be remembered in order to keep them in the Composition and not create a new one every time
 @Composable
 fun rememberEditableUserInputState(hint: String): EditableUserInputState =
     // survives activity and process recreation.

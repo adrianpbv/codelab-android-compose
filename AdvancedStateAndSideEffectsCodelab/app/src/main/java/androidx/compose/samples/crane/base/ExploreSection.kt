@@ -87,12 +87,13 @@ fun ExploreSection(
                 // Show the button if the first visible item is past
                 // the first item. We use a remembered derived state to
                 // minimize unnecessary compositions
-                val showButton by remember {
-                    derivedStateOf {
+                val showButton by remember { // You'll also wrap the call with the remember API, so the calculated value survives recomposition.
+                    derivedStateOf { // use it when you want a Compose State that's derived from another State
                         listState.firstVisibleItemIndex > 0
                     }
                 }
                 if (showButton) {
+                    // TODO use of rememberCoroutineScope to call a suspend function inside a callback in a Composable function
                     val coroutineScope = rememberCoroutineScope()
                     FloatingActionButton(
                         backgroundColor = MaterialTheme.colors.primary,
